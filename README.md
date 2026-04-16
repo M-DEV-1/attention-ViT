@@ -83,6 +83,8 @@ attention-vit/
 │       └── interpretability.py# Grad-CAM and attention maps
 ├── scripts/
 │   └── run.py                 # Main entry point
+├── notebooks/                 
+│   └── 01_colab_training_pipeline.ipynb # Interactive Colab runtime
 ├── requirements.txt
 └── results/
     ├── tables/                # CSV results (tracked)
