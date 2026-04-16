@@ -3,13 +3,19 @@ import logging
 import os
 import torch
 
-from config import *
-from utils import set_seed, get_device, setup_logging
-from models import get_model
-from dataset import get_dataloaders
-from train import train_model
-from evaluate import evaluate_robustness
-from interpretability import GradCAM, generate_vit_attention, overlay_heatmap
+import sys
+
+# Add project root to path so src modules can be resolved
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(PROJECT_ROOT)
+
+from src.config import *
+from src.utils.logger import set_seed, get_device, setup_logging
+from src.models.architecture import get_model
+from src.data.dataset import get_dataloaders
+from src.core.train import train_model
+from src.core.evaluate import evaluate_robustness
+from src.utils.interpretability import GradCAM, generate_vit_attention, overlay_heatmap
 
 def main():
     parser = argparse.ArgumentParser(description="Attention-ViT vs CNN Pipeline")
@@ -52,7 +58,7 @@ def main():
         if args.mode in ['eval', 'all']:
             logging.info("Starting Robustness Evaluation...")
             # We must load latest checkpoint before evaluation
-            from train import load_checkpoint
+            from src.core.train import load_checkpoint
             # Dummy optimizer since we only need the model weights for eval
             import torch.optim as optim
             dummy_opt = optim.Adam(model.parameters())
@@ -64,7 +70,7 @@ def main():
         # --- INTERPRETABILITY ---
         if args.mode in ['interpret', 'all']:
             logging.info("Starting Interpretability Generation...")
-            from train import load_checkpoint
+            from src.core.train import load_checkpoint
             import torch.optim as optim
             dummy_opt = optim.Adam(model.parameters())
             _ = load_checkpoint(model, dummy_opt, CHECKPOINT_DIR, model_name, device)

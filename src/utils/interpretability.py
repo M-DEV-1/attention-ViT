@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 from torchvision import transforms
-from config import FIGURES_DIR
+from src.config import FIGURES_DIR
 import logging
 
 class GradCAM:

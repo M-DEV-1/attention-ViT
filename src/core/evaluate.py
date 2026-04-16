@@ -6,8 +6,8 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import logging
-from config import TABLES_DIR
-from corruptions import apply_corruption
+from src.config import TABLES_DIR
+from src.core.corruptions import apply_corruption
 from PIL import Image
 
 class CorruptedDataset(torch.utils.data.Dataset):
@@ -59,7 +59,7 @@ def evaluate_robustness(model, data_dir, model_name, device, batch_size=128):
     model.eval()
     
     # Load raw validation dataset (no transforms initially)
-    raw_val_dataset = datasets.CIFAR10(root=data_dir, train=False, download=True, transform=None)
+    raw_val_dataset = datasets.CIFAR100(root=data_dir, train=False, download=True, transform=None)
     
     corruptions = ['clean', 'blur', 'noise', 'rotation']
     severities = [1, 2, 3, 4, 5]

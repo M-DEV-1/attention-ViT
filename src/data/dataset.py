@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 
 def get_dataloaders(data_dir, batch_size):
     """
-    Downloads and prepares CIFAR-10 dataloaders.
+    Downloads and prepares CIFAR-100 dataloaders.
     Applies standard ImageNet transforms + resize to 224x224 for models.
     """
     # Standard ImageNet normalization and sizing
@@ -16,7 +16,7 @@ def get_dataloaders(data_dir, batch_size):
     ])
     
     # Download and load training data
-    train_dataset = datasets.CIFAR10(
+    train_dataset = datasets.CIFAR100(
         root=data_dir, 
         train=True, 
         download=True, 
@@ -24,7 +24,7 @@ def get_dataloaders(data_dir, batch_size):
     )
     
     # Download and load validation data
-    val_dataset = datasets.CIFAR10(
+    val_dataset = datasets.CIFAR100(
         root=data_dir, 
         train=False, 
         download=True, 
@@ -48,8 +48,7 @@ def get_dataloaders(data_dir, batch_size):
         pin_memory=True
     )
     
-    # CIFAR-10 classes
-    classes = ('plane', 'car', 'bird', 'cat', 'deer', 
-               'dog', 'frog', 'horse', 'ship', 'truck')
+    # CIFAR-100 classes (we can optionally load this dynamically, mock here for demo)
+    classes = train_dataset.classes
                
     return train_loader, val_loader, classes

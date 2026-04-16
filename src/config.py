@@ -7,10 +7,12 @@ def _get_base_checkpoint_dir():
         return '/content/drive/MyDrive/attention-vit/checkpoints'
     return './checkpoints'
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 # Environment setup
 CHECKPOINT_DIR = _get_base_checkpoint_dir()
-DATA_DIR = './data'
-RESULTS_DIR = './results'
+DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
+RESULTS_DIR = os.path.join(PROJECT_ROOT, 'results')
 TABLES_DIR = os.path.join(RESULTS_DIR, 'tables')
 FIGURES_DIR = os.path.join(RESULTS_DIR, 'figures')
 
@@ -24,7 +26,7 @@ os.makedirs(FIGURES_DIR, exist_ok=True)
 BATCH_SIZE = 128
 LEARNING_RATE = 1e-3
 NUM_EPOCHS = 10
-NUM_CLASSES = 10 # CIFAR-10
+NUM_CLASSES = 100 # CIFAR-100
 
 # Models list to evaluate
 MODELS = ["resnet50", "vit_b_16"]

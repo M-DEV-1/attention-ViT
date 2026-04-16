@@ -9,7 +9,7 @@ Robustness and interpretability analysis of CNNs vs Vision Transformers under im
 | ResNet-50 | CNN          | ~25.6M (trainable: ~20K)  |
 | ViT-B/16  | Transformer  | ~86.6M (trainable: ~7.7K) |
 
-Both models are pretrained on ImageNet and fine-tuned on CIFAR-10 with frozen backbones.
+Both models are pretrained on ImageNet and fine-tuned on CIFAR-100 with frozen backbones.
 
 ## Pipeline
 
@@ -37,15 +37,15 @@ train → evaluate (clean + corrupted) → interpret (Grad-CAM / Attention)
 
 ```bash
 pip install -r requirements.txt
-python run.py --mode all
+python scripts/run.py --mode all
 ```
 
 ### Individual stages
 
 ```bash
-python run.py --mode train --epochs 10
-python run.py --mode eval
-python run.py --mode interpret
+python scripts/run.py --mode train --epochs 10
+python scripts/run.py --mode eval
+python scripts/run.py --mode interpret
 ```
 
 ### Resume training
@@ -53,34 +53,40 @@ python run.py --mode interpret
 Training resumes automatically from the latest checkpoint. To start fresh:
 
 ```bash
-python run.py --mode train --no-resume
+python scripts/run.py --mode train --no-resume
 ```
 
 ## Cross-Platform Usage
 
-| Environment | Command          | Checkpoint Storage  |
-| ----------- | ---------------- | ------------------- |
-| Colab (T4)  | `!python run.py` | Google Drive (auto) |
-| Linux / DGX | `python run.py`  | `./checkpoints/`    |
-| Windows     | `python run.py`  | `./checkpoints/`    |
+| Environment | Command | Checkpoint Storage |
+|-------------|---------|-------------------|
+| Colab (T4) | `!python scripts/run.py` | Google Drive (auto) |
+| Linux / DGX | `python scripts/run.py` | `./checkpoints/` |
+| Windows | `python scripts/run.py` | `./checkpoints/` |
 
 ## Project Structure
 
 ```
 attention-vit/
-├── config.py              # Centralized configuration
-├── utils.py               # Seed, device, logging
-├── models.py              # ResNet-50 and ViT-B/16 loading
-├── dataset.py             # CIFAR-10 data pipeline
-├── train.py               # Training loop + checkpointing
-├── corruptions.py         # Image corruption functions
-├── evaluate.py            # Clean + corrupted evaluation
-├── interpretability.py    # Grad-CAM and attention maps
-├── run.py                 # Main entry point
+├── src/
+│   ├── config.py              # Centralized configuration
+│   ├── data/
+│   │   └── dataset.py         # CIFAR-100 data pipeline
+│   ├── models/
+│   │   └── architecture.py    # ResNet-50 and ViT-B/16 loading
+│   ├── core/
+│   │   ├── train.py           # Training loop + checkpointing
+│   │   ├── evaluate.py        # Clean + corrupted evaluation
+│   │   └── corruptions.py     # Image corruption functions
+│   └── utils/
+│       ├── logger.py          # Seed, device, logging
+│       └── interpretability.py# Grad-CAM and attention maps
+├── scripts/
+│   └── run.py                 # Main entry point
 ├── requirements.txt
 └── results/
-    ├── tables/            # CSV results (tracked)
-    └── figures/           # Generated visualizations (gitignored)
+    ├── tables/                # CSV results (tracked)
+    └── figures/               # Generated visualizations (gitignored)
 ```
 
 ## License
