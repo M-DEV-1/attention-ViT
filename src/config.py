@@ -4,8 +4,14 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Environment setup
 CHECKPOINT_DIR = os.path.join(PROJECT_ROOT, 'checkpoints')
-DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 RESULTS_DIR = os.path.join(PROJECT_ROOT, 'results')
+
+# If running on Colab, put data in local fast NVMe storage to avoid Google Drive I/O failures
+if os.path.exists('/content'):
+    DATA_DIR = '/content/data'
+else:
+    DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
+
 TABLES_DIR = os.path.join(RESULTS_DIR, 'tables')
 FIGURES_DIR = os.path.join(RESULTS_DIR, 'figures')
 
