@@ -1,16 +1,9 @@
 import os
 
-# Base paths
-def _get_base_checkpoint_dir():
-    # Detect if running in Colab and if drive is mounted
-    if os.path.exists('/content/drive/MyDrive'):
-        return '/content/drive/MyDrive/attention-vit/checkpoints'
-    return './checkpoints'
-
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Environment setup
-CHECKPOINT_DIR = _get_base_checkpoint_dir()
+CHECKPOINT_DIR = os.path.join(PROJECT_ROOT, 'checkpoints')
 DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
 RESULTS_DIR = os.path.join(PROJECT_ROOT, 'results')
 TABLES_DIR = os.path.join(RESULTS_DIR, 'tables')
