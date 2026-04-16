@@ -51,11 +51,14 @@ def train_model(model, train_loader, val_loader, num_epochs, device, checkpoint_
     model = model.to(device)
     
     for epoch in range(start_epoch, num_epochs):
-        model.train()
-        # Freeze batchnorm layers since we are doing linear probing
-        for module in model.modules():
-            if isinstance(module, nn.BatchNorm2d):
-                module.eval()
+        # We put the entire model in eval mode to strictly freeze all backbone behaviors
+        # like Dropout and BatchNorm. We then explicitly set the classification head 
+        # to train mode (though nn.Linear functionally behaves the same in both).
+        model.eval()
+        if hasattr(model, 'fc'):
+            model.fc.train()
+        if hasattr(model, 'heads'):
+            model.heads.train()
                 
         running_loss = 0.0
         correct = 0
