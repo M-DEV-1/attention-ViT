@@ -19,7 +19,7 @@ os.makedirs(FIGURES_DIR, exist_ok=True)
 BATCH_SIZE = 128
 LEARNING_RATE = 1e-3
 NUM_EPOCHS = 10
-NUM_CLASSES = 100 # CIFAR-100
+NUM_CLASSES = 102 # Caltech-101 (101 classes + background)
 
 # Models list to evaluate
 MODELS = ["resnet50", "vit_b_16"]

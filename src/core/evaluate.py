@@ -36,6 +36,9 @@ class CorruptedDataset(torch.utils.data.Dataset):
         # For CIFAR-10, we'll bypass its default transform
         img, label = self.dataset[idx]
         
+        # Convert to RGB to ensure 3 channels for ImageNet models
+        img = img.convert('RGB')
+        
         # Resize to 224x224 (required for models)
         img = img.resize((224, 224))
         
@@ -61,7 +64,8 @@ def evaluate_robustness(model, data_dir, model_name, device, batch_size=128):
     model.eval()
     
     # Load raw validation dataset (no transforms initially)
-    raw_val_dataset = datasets.CIFAR100(root=data_dir, train=False, download=True, transform=None)
+    from src.data.dataset import get_caltech101_splits
+    _, raw_val_dataset, _ = get_caltech101_splits(data_dir, transform=None)
     
     corruptions = ['clean', 'blur', 'noise', 'rotation']
     severities = [1, 2, 3, 4, 5]

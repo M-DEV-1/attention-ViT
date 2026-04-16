@@ -74,8 +74,8 @@ def main():
             model.eval()
             
             # Fetch a raw un-transformed validation sample
-            from torchvision import datasets
-            raw_val_dataset = datasets.CIFAR100(root=DATA_DIR, train=False, download=True, transform=None)
+            from src.data.dataset import get_caltech101_splits
+            _, raw_val_dataset, _ = get_caltech101_splits(DATA_DIR, transform=None)
             raw_image, label_idx = raw_val_dataset[0]
             label_name = classes[label_idx]
             
