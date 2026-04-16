@@ -52,6 +52,11 @@ def train_model(model, train_loader, val_loader, num_epochs, device, checkpoint_
     
     for epoch in range(start_epoch, num_epochs):
         model.train()
+        # Freeze batchnorm layers since we are doing linear probing
+        for module in model.modules():
+            if isinstance(module, nn.BatchNorm2d):
+                module.eval()
+                
         running_loss = 0.0
         correct = 0
         total = 0
