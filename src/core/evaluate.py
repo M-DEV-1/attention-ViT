@@ -2,11 +2,13 @@ import os
 import torch
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import logging
-from src.config import TABLES_DIR
+from src.config import TABLES_DIR, FIGURES_DIR
 from src.core.corruptions import apply_corruption
 from PIL import Image
 
@@ -108,8 +110,39 @@ def evaluate_robustness(model, data_dir, model_name, device, batch_size=128):
 
     # Save to CSV
     df = pd.DataFrame(results)
+    os.makedirs(TABLES_DIR, exist_ok=True)
     csv_path = os.path.join(TABLES_DIR, f"{model_name}_robustness_results.csv")
     df.to_csv(csv_path, index=False)
     logging.info(f"Saved results to {csv_path}")
     
+    # Generate Accuracy Dropoff Plot (Instant inference plotting, no training)
+    _plot_robustness_dropoff(df, model_name)
+    
     return df
+
+def _plot_robustness_dropoff(df, model_name):
+    """Generates a line plot showing accuracy dropoff per corruption type."""
+    os.makedirs(FIGURES_DIR, exist_ok=True)
+    plt.figure(figsize=(10, 6))
+    sns.set_style("darkgrid")
+    
+    clean_acc = df[df['Corruption'] == 'clean']['Accuracy'].values[0]
+    plt.axhline(y=clean_acc, color='black', linestyle='--', label=f'Clean Baseline ({clean_acc:.2f}%)')
+    
+    corruptions = [c for c in df['Corruption'].unique() if c != 'clean']
+    for corruption in corruptions:
+        subset = df[df['Corruption'] == corruption]
+        plt.plot(subset['Severity'], subset['Accuracy'], marker='o', linewidth=2, label=corruption.capitalize())
+        
+    plt.title(f"{model_name.upper()} - Robustness Accuracy Dropoff", fontsize=16, fontweight='bold')
+    plt.xlabel("Corruption Severity", fontsize=12)
+    plt.ylabel("Accuracy (%)", fontsize=12)
+    plt.xticks([1, 2, 3, 4, 5])
+    plt.legend(title="Corruption Type")
+    plt.ylim(0, 100)
+    plt.tight_layout()
+    
+    plot_path = os.path.join(FIGURES_DIR, f"{model_name}_robustness_dropoff.png")
+    plt.savefig(plot_path, dpi=300)
+    plt.close()
+    logging.info(f"Saved dropoff plot to {plot_path}")
