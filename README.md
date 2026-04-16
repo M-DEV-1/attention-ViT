@@ -1,4 +1,4 @@
-# Interpretability Analysis of CNNs and Vision Transformers under Image Corruptions
+# Seeing vs Attending (CNNs vs ViT)
 
 Robustness and interpretability analysis of CNNs vs Vision Transformers under image corruptions, with portable training infrastructure.
 
@@ -58,38 +58,11 @@ python scripts/run.py --mode train --no-resume
 
 ## Cross-Platform Usage
 
-| Environment | Command | Checkpoint Storage |
-|-------------|---------|-------------------|
-| Colab (T4) | `!python scripts/run.py` | Google Drive (auto) |
-| Linux / DGX | `python scripts/run.py` | `./checkpoints/` |
-| Windows | `python scripts/run.py` | `./checkpoints/` |
-
-## Project Structure
-
-```
-attention-vit/
-├── src/
-│   ├── config.py              # Centralized configuration
-│   ├── data/
-│   │   └── dataset.py         # CIFAR-100 data pipeline
-│   ├── models/
-│   │   └── architecture.py    # ResNet-50 and ViT-B/16 loading
-│   ├── core/
-│   │   ├── train.py           # Training loop + checkpointing
-│   │   ├── evaluate.py        # Clean + corrupted evaluation
-│   │   └── corruptions.py     # Image corruption functions
-│   └── utils/
-│       ├── logger.py          # Seed, device, logging
-│       └── interpretability.py# Grad-CAM and attention maps
-├── scripts/
-│   └── run.py                 # Main entry point
-├── notebooks/                 
-│   └── 01_pipeline.ipynb      # Interactive execution and visualization
-├── requirements.txt
-└── results/
-    ├── tables/                # CSV results (tracked)
-    └── figures/               # Generated visualizations (gitignored)
-```
+| Environment | Command                  | Checkpoint Storage  |
+| ----------- | ------------------------ | ------------------- |
+| Colab (T4)  | `!python scripts/run.py` | Google Drive (auto) |
+| Linux / DGX | `python scripts/run.py`  | `./checkpoints/`    |
+| Windows     | `python scripts/run.py`  | `./checkpoints/`    |
 
 ## License
 
