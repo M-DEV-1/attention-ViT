@@ -18,7 +18,7 @@ def save_checkpoint(epoch, model, optimizer, checkpoint_dir, model_name):
     logging.info(f"Saved checkpoint to {checkpoint_path}")
 
 def load_checkpoint(model, optimizer, checkpoint_dir, model_name, device):
-    """Loads checkpoint if it exists."""
+    """Loads checkpoint if it exists. If optimizer is None, only model weights are loaded."""
     checkpoint_path = os.path.join(checkpoint_dir, f"{model_name}_latest.pth")
     
     if os.path.exists(checkpoint_path):
@@ -26,7 +26,8 @@ def load_checkpoint(model, optimizer, checkpoint_dir, model_name, device):
         checkpoint = torch.load(checkpoint_path, map_location=device)
         
         model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        if optimizer is not None:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         start_epoch = checkpoint['epoch'] + 1
         return start_epoch
     else:

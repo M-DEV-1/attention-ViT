@@ -59,10 +59,7 @@ def main():
             logging.info("Starting Robustness Evaluation...")
             # We must load latest checkpoint before evaluation
             from src.core.train import load_checkpoint
-            # Dummy optimizer since we only need the model weights for eval
-            import torch.optim as optim
-            dummy_opt = optim.Adam(model.parameters())
-            _ = load_checkpoint(model, dummy_opt, CHECKPOINT_DIR, model_name, device)
+            _ = load_checkpoint(model, None, CHECKPOINT_DIR, model_name, device)
             
             model = model.to(device)
             evaluate_robustness(model, DATA_DIR, model_name, device, BATCH_SIZE)
@@ -71,9 +68,7 @@ def main():
         if args.mode in ['interpret', 'all']:
             logging.info("Starting Interpretability Generation...")
             from src.core.train import load_checkpoint
-            import torch.optim as optim
-            dummy_opt = optim.Adam(model.parameters())
-            _ = load_checkpoint(model, dummy_opt, CHECKPOINT_DIR, model_name, device)
+            _ = load_checkpoint(model, None, CHECKPOINT_DIR, model_name, device)
             
             model = model.to(device)
             model.eval()
